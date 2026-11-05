@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "compaction-bench"
+version = "0.1.0"
+description = "Compare agent context-compaction strategies on the same traces: success rate, peak context, and token cost."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Gang Ji" }]
+keywords = ["llm", "agents", "context", "compaction", "evaluation", "benchmark"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Testing",
+]
+dependencies = []
+
+[project.scripts]
+compaction-bench = "compaction_bench.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/gangjig/compaction-bench"
+Repository = "https://github.com/gangjig/compaction-bench"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+compaction_bench = ["data/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
