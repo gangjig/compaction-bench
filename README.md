@@ -75,7 +75,21 @@ The strategy set and the demo design are motivated by NVIDIA's paper **"You don'
 
 This repository was designed to be reproducible from a single prompt. Paste the following into an LLM to generate a similar project:
 
-> Write a Python 3.10+ command-line tool called "compaction-bench", standard library only, with a src layout and a pytest suite. The tool compares context-compaction strategies for LLM agents on recorded traces. Input is a JSON spec: each task has steps (token size, optional "critical" flag for steps that establish facts needed later, optional "segment" id for multi-conversation chains) and checkpoints (a step index plus the critical step indexes whose facts must still be available just before that step). Implement five strategies — full history, single-action (running summary plus latest step), end-of-conversation (collapse each finished conversation into a summary), sliding window (last N steps), periodic summary (fold history into a summary every K steps) — where a summary costs a fixed token budget and retains a bounded number of critical facts with FIFO eviction. Simulate each task deterministically under each strategy and report success rate, median and max peak context tokens, total context tokens, and an optional cost estimate from a per-million-token price. Provide `run`, `demo` (three built-in tasks shaped so the strategies visibly differ, including one that overflows summary capacity), and `strategies` subcommands, Markdown and JSON output, and tests covering spec validation, each strategy's retention behaviour, aggregation, and the CLI.
+> Write a small Python command-line tool, standard library only, that
+> benchmarks context-compaction strategies for LLM agents on recorded
+> traces, without calling a real model. A task is described as a
+> sequence of steps with token sizes, where some steps are marked as
+> establishing critical facts that later checkpoints depend on; each
+> strategy (keeping the full history, keeping a running summary,
+> summarizing at conversation boundaries, keeping a sliding window, or
+> summarizing periodically) is simulated deterministically, with
+> summaries costing a fixed token budget and holding only a bounded
+> number of critical facts. The tool reports, per strategy, how many
+> checkpoints still succeed plus peak and total context size and an
+> optional cost estimate, so the trade-off between cheaper context and
+> forgotten facts is visible side by side. Include a demo whose built-in
+> tasks make the strategies visibly differ, including one where the
+> summary overflows.
 
 ## License
 
